@@ -17,8 +17,7 @@ else:
 class BaseModel:
     """A base class for all hbnb models"""
     if getenv("HBNB_TYPE_STORAGE") == "db":
-        id = Column(String(60), unique=True, nullable=False, primary_key=True,
-                    default=str(uuid4()))
+        id = Column(String(60), unique=True, nullable=False, primary_key=True)
         created_at = Column(DateTime, nullable=False,
                             default=datetime.utcnow())
         updated_at = Column(DateTime, nullable=False,
@@ -52,6 +51,7 @@ class BaseModel:
 
     def save(self):
         """Updates updated_at with current time when instance is changed"""
+        from models import storage
         self.updated_at = datetime.now()
         storage.new(self)
         storage.save()

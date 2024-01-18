@@ -21,15 +21,15 @@ class DBStorage:
 
     def __init__(self):
         """starts the sql db storage"""
-        self.__engine = create_engine(f"mysql+mysqldb://"
-                                      + f"{os.getenv('HBNB_MYSQL_USER')}:"
-                                      + f"{os.getenv('HBNB_MYSQL_PWD')}"
-                                      + f"@{os.getenv('HBNB_MYSQL_HOST')}/"
-                                      + f"{os.getenv('HBNB_MYSQL_DB')}",
-                                      pool_pre_ping=True)
+        user = os.getenv('HBNB_MYSQL_USER')
+        passwd = os.getenv('HBNB_MYSQL_PWD')
+        host = os.getenv('HBNB_MYSQL_HOST')
+        database = os.getenv('HBNB_MYSQL_DB')
+        self.__engine = create_engine(
+                'mysql+mysqldb://{}:{}@{}:3306/{}'.format(user, passwd, host, database), pool_pre_ping=True)
 
-        if os.getenv("HBNB_MYSQL_USER") == "test":
-            Base.metadata.drop_all(bind=self.__engine)
+        if os.getenv('HBNB_ENV') == 'test':
+            Base.metadata.drop_all(self.__engine)
 
     def all(self, cls=None):
         """Returns dict of the models stored in our db """
